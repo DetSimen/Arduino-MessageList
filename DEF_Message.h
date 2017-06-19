@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 // system messages
 
@@ -10,14 +10,14 @@
 
 #define  msg_SecondTick			0x10
 #define  msg_PrintRelayState	0x11
-#define	 msg_ReadMQ2			0x12	//читать данные с датчика MQ2
-#define  msg_MQ2Changed			0x13	// показания c MQ2 изменились
+#define	 msg_ReadMQ2			0x12	//С‡РёС‚Р°С‚СЊ РґР°РЅРЅС‹Рµ СЃ РґР°С‚С‡РёРєР° MQ2
+#define  msg_MQ2Changed			0x13	// РїРѕРєР°Р·Р°РЅРёСЏ c MQ2 РёР·РјРµРЅРёР»РёСЃСЊ
 #define  msg_ReadKey			0x14
 
-#define  msg_KeyDown			0x20	// кнопка нажата
-#define	 msg_KeyUp				0x21	// кнопка отпущена
+#define  msg_KeyDown			0x20	// РєРЅРѕРїРєР° РЅР°Р¶Р°С‚Р°
+#define	 msg_KeyUp				0x21	// РєРЅРѕРїРєР° РѕС‚РїСѓС‰РµРЅР°
 
-#define msg_VentON				0x22	// включить вытяжку
-#define msg_VentOFF				0x23	// выключить вытяжку
+#define msg_VentON				0x22	// РІРєР»СЋС‡РёС‚СЊ РІС‹С‚СЏР¶РєСѓ
+#define msg_VentOFF				0x23	// РІС‹РєР»СЋС‡РёС‚СЊ РІС‹С‚СЏР¶РєСѓ
 
 

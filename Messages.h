@@ -1,4 +1,4 @@
-#pragma  once
+п»ї#pragma  once
 #include "arduino.h"
 #include "Print.h"
 #include "DEF_Message.h"
@@ -41,7 +41,7 @@ private:
 	byte     flength;
 	byte     fcount;
 	void     DeleteFirst(void);
-	bool	 FindMessage(PMessage msg);  //есть ли такое сообщение в очереди
+	bool	 FindMessage(PMessage msg);  //РµСЃС‚СЊ Р»Рё С‚Р°РєРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ РІ РѕС‡РµСЂРµРґРё
 public:
 
 	TMessageList();
@@ -50,7 +50,7 @@ public:
 
 
 
-	bool Availiable();                 // проверка, что очередь сообщений не пуста
+	bool Availiable();                 // РїСЂРѕРІРµСЂРєР°, С‡С‚Рѕ РѕС‡РµСЂРµРґСЊ СЃРѕРѕР±С‰РµРЅРёР№ РЅРµ РїСѓСЃС‚Р°
 
 	TMessage GetMessage();
 
