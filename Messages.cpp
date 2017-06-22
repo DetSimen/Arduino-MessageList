@@ -103,6 +103,7 @@ TMessageList::TMessageList(byte len)
 
 TMessageList::~TMessageList()
 {
+	while (fcount) GetMessage();
 	delete[] Items;
 }
 
