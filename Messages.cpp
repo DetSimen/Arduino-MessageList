@@ -52,11 +52,12 @@ bool TMessage::operator==(byte msg)
 
 void TMessageList::DeleteFirst(void)
 {
+	byte _sreg = SREG;
 	cli();
 	for (byte i = 1; i < flength; i++) Items[i - 1] = Items[i];
 	Items[flength - 1] = NULL;
 	if (fcount>0) fcount--;
-	sei();
+	SREG = _sreg;
 }
 
 bool TMessageList::FindMessage(PMessage msg)
