@@ -136,9 +136,9 @@
 применение: 
 	скачать 3 файла, 2 - h, 1 - срр.
 	
-	обьявить глобально extern TMessageList *MessageList;
-	
 	бросить в папку с проектом, подключить хидеры. 
+	
+	обьявить глобально extern TMessageList *MessageList;
 	
 	в сетапе написать MessageList = new TMessageList(); 
 	
