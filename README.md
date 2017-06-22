@@ -4,28 +4,80 @@
 
 Для начала определим, какие сообщения мы хотим видеть в своей программе, записываем их в файл DEF_Message.h. Файл имеет саму обчную простецкую структуру, ничего, кроме #define тама и нет. 
 
-  #pragma once
+    #pragma once
 
-  // system messages
+     // system messages
 
-  #define  msg_Empty 0x00
-  #define  msg_Error 0x01
-  #define  msg_Paint 0x02
+    #define  msg_Empty 0x00
+    #define  msg_Error 0x01
+    #define  msg_Paint 0x02
 
-  // user messages
+    // user messages
 
-  #define  msg_SecondTick		0x10  // секунда тикнула
-  #define	 msg_ReadMQ2			0x12	//читать данные с датчика MQ2
-  #define  msg_MQ2Changed		0x13	// показания c MQ2 изменились
-  #define  msg_ReadKey			0x14  // читать клавиатуру
+    #define  msg_SecondTick		0x10  // секунда тикнула
+    #define	 msg_ReadMQ2			0x12	//читать данные с датчика MQ2
+    #define  msg_MQ2Changed		0x13	// показания c MQ2 изменились
+    #define  msg_ReadKey			0x14  // читать клавиатуру
 
-  #define  msg_KeyDown			0x20	// кнопка нажата
-  #define	 msg_KeyUp				0x21	// кнопка отпущена
+    #define  msg_KeyDown			0x20	// кнопка нажата
+    #define	 msg_KeyUp				0x21	// кнопка отпущена
 
-  #define msg_VentON				0x22	// включить вытяжку
-  #define msg_VentOFF				0x23	// выключить вытяжку
+    #define msg_VentON				0x22	// включить вытяжку
+    #define msg_VentOFF				0x23	// выключить вытяжку
 
 Просто определяем числовые значения для всех используемых нами сообщений 0-255 (1 байт). Смотрим только, чтобы разные сообщения имели разные номера, иначе аяяй (будет всегда выполняться функция первого сообщения)
 
 
 первые 16 сообщений я выделил как системные, разницу между ними и другими расскажу позже.
+
+Теперь собственно о том, что есть сообщение.  Сообщение, сопсно, это структура описанная как 
+
+    struct TMessage
+    {
+    public:
+	    byte   Message;     // код сообщения, описанный в DEF_Message.h 
+	    word   LoParam;     // два необязательных параметра, младший 
+	    word   HiParam;     // и старший 
+
+	    TMessage();         // конструктор, создает системное пустое сообщение msg_Empty 
+	    TMessage(byte msg, word loparam, word hiparam = 0);  // конструктор. Полностью создает сообщение со всеми параметрами
+	    TMessage(byte msg); // конструктор. создает сообщение с кодом msg и обоими параметрами равными нулю
+
+	    bool operator ==(TMessage msg);  // переопределенный оператор сравнения. С другим сообщением
+	    bool operator ==(PMessage msg);  // с указателем на сообщение
+	    bool operator ==(byte msg);      // и просто с числом (с кодом сообщения)  (для внутреннего использования)
+    };
+    
+    Далее.  Одно сообщение малоинтересно, нужно собрать их в очередь и по очереди обрабатывать.  Следующий класс TMessageList является собственно, агрегатором записей типа TMessagе, грубо говоря - массивом, организованным в очередь первым пришел - первым выйдешь (обработаешься).  выглядит это кактотак: 
+    
+    class TMessageList
+    {
+      private:
+	    PMessage *Items;        // массив указателей на сообщения
+
+	    byte     flength;       // емкость очереди (максимальное число сообщений в очереди) задается в конструкторе
+	    byte     fcount;        // счетчик сообщений, которые находятся в очереди
+	    void     DeleteFirst(void);       // удалить первое сообщение, со сдвигом остальных вперед
+	    bool	 FindMessage(PMessage msg);  //проверить, есть ли такое сообщение в очереди
+    public:
+
+	    TMessageList();                 // конструктор.  По умолчанию максимальная ёмкость очереди - 16 сообщений
+	    TMessageList(byte length);      // а тут емкость можно задать самому (макс значение - 255, но память сломаеца гораздо раньше) 
+
+	    bool Availiable();                 // проверка, что очередь сообщений не пуста
+
+	    TMessage GetMessage();          // взять сообщение из очереди
+
+	    bool Add(PMessage msg);         // добавить сообщение в очередь, с кодом msg и обоими параметрами == 0
+	    bool Add(byte msg, word lo, word high);  // добавить полностью описанное сообщение в очередь, с кодом и параметрами
+	    bool Add(byte msg);
+	    bool AddEmpty(void);
+	    bool Paint(void);
+	    bool Paint(int objptr, int param) { return Add(msg_Paint, objptr, param); }
+	    bool Error(int errornum);
+	    bool Error() { return Add(msg_Error); }
+
+	    byte Count();
+
+    };
+
