@@ -124,9 +124,15 @@
 		{
 		case msg_Empty:					break;   // пустое сообщение, просто убираем его из очереди
 		case msg_Paint:      evtPaint();		break;   // перерисовать икранчег
+		case msg_MQ2Changed: evtMQChange(msg);		break;   // сигнал с датчика дыма 
 		default: Serial << "Error in MessageList\n";
 		}
 	}
+	
+	void evtMQChange(TMessage &msg)    
+	{
+		if (msg.LoParam>250) Vent.On(); else Vent.Off();  // включить вытажку, если значение с дыма > 250
+	}		
 
 	void evtPaint()
 	{
